@@ -1,0 +1,31 @@
+#################################
+#			VARIABLES			#
+#################################
+
+INCLUDE_DIR = ./includes/
+
+CPP_FLAGS = -std=c++11 -I$(INCLUDE_DIR)
+
+EXEC_NAME = vvm
+OBJS = main.o
+
+ifeq ($(OS), Windows_NT)
+	EXEC_SUFFIX = .exe
+endif
+
+#################################
+#		COMPILATION RULES		#
+#################################
+
+all: $(OBJS)
+	g++ $< -o $(EXEC_NAME) $(CPP_FLAGS)
+
+%.o: %.cpp
+	g++ -c -o $@ $< $(CPP_FLAGS)
+
+#Cleaning rules
+clean: clean_tmp
+		rm -f vvm$(EXEC_SUFFIX)
+
+clean_tmp:
+	rm -rf *~ *.o

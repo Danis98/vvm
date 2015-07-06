@@ -1,0 +1,2 @@
+PARAM "Hello world!\n"  
+CALL out 1 

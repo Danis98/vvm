@@ -1,0 +1,48 @@
+PARAM "Enter a\n"  
+CALL out 1 
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_a
+JUMP L0  
+LABEL sym_0_f_printTable  
+ASSIGN param_0  sym_0_0_n
+PARAM "\t"  
+CALL out 1 
+ASSIGN 1  sym_0_0_0_i
+LABEL L1  
+LESSEQ sym_0_0_0_i sym_0_0_n t2
+JUMPNIF t2 L2 
+PLUS sym_0_0_0_i "\t" t3
+PARAM t3  
+CALL out 1 
+JUMP L1  
+LABEL L2  
+PARAM "\n"  
+CALL out 1 
+ASSIGN 1  sym_0_0_0_i
+LABEL L3  
+LESSEQ sym_0_0_0_i sym_0_0_n t4
+JUMPNIF t4 L4 
+PLUS sym_0_0_0_i ":\t" t5
+PARAM t5  
+CALL out 1 
+ASSIGN 1  sym_0_0_0_j
+LABEL L5  
+LESSEQ sym_0_0_0_j sym_0_0_n t6
+JUMPNIF t6 L6 
+MULT sym_0_0_0_i sym_0_0_0_j t7
+ASSIGN t7  sym_0_0_0_1_0_k
+PLUS sym_0_0_0_1_0_k "\t" t8
+PARAM t8  
+CALL out 1 
+JUMP L5  
+LABEL L6  
+PARAM "\n"  
+CALL out 1 
+JUMP L3  
+LABEL L4  
+RETURN   
+LABEL L0  
+PARAM sym_0_a  
+CALL sym_0_f_printTable 1 

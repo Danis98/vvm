@@ -1,0 +1,26 @@
+CALL in 0 t0
+PARAM t0  
+CALL to_double 1 t1
+ASSIGN t1  sym_0_a
+CALL in 0 t2
+PARAM t2  
+CALL to_double 1 t3
+ASSIGN t3  sym_0_b
+PLUS sym_0_a " - " t6
+PLUS t6 sym_0_b t5
+PLUS t5 " = " t4
+PARAM t4  
+CALL out 1 
+PARAM sym_0_b  
+PARAM 2  
+CALL pow 2 t8
+PARAM sym_0_a  
+PARAM 2  
+CALL pow 2 t9
+PLUS t9 t8 t7
+PARAM t7  
+CALL sqrt 1 t10
+ASSIGN t10  sym_0_c
+PLUS sym_0_c "\n" t11
+PARAM t11  
+CALL out 1 

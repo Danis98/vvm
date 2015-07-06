@@ -1,0 +1,24 @@
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_n
+JUMP L0  
+LABEL sym_0_f_factorial  
+ASSIGN param_0  sym_0_0_n
+ASSIGN 1  sym_0_0_0_f
+ASSIGN 2  sym_0_0_0_i
+LABEL L1  
+LESSEQ sym_0_0_0_i sym_0_0_n t2
+JUMPNIF t2 L2 
+MULT sym_0_0_0_f sym_0_0_0_i t3
+ASSIGN t3  sym_0_0_0_f
+JUMP L1  
+LABEL L2  
+RETURN sym_0_0_0_f  
+LABEL L0  
+PARAM sym_0_n  
+CALL sym_0_f_factorial 1 t4
+PARAM t4  
+CALL to_string 1 t5
+PARAM t5  
+CALL out 1 

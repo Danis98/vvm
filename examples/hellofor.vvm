@@ -1,0 +1,12 @@
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_num
+ASSIGN 0  sym_0_i
+LABEL L0  
+LESS sym_0_i sym_0_num t2
+JUMPNIF t2 L1 
+PARAM "Hello world!\n"  
+CALL out 1 
+JUMP L0  
+LABEL L1  

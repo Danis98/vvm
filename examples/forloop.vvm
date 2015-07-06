@@ -1,0 +1,21 @@
+PARAM "Enter a number\n"  
+CALL out 1 
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_a
+PARAM "Enter a string\n"  
+CALL out 1 
+CALL in 0 t2
+ASSIGN t2  sym_0_s
+ASSIGN 1  sym_0_i
+LABEL L0  
+LESSEQ sym_0_i sym_0_a t3
+JUMPNIF t3 L1 
+PLUS sym_0_s "\n" t4
+PARAM t4  
+CALL out 1 
+JUMP L0  
+LABEL L1  
+PARAM "Done looping!\n"  
+CALL out 1 

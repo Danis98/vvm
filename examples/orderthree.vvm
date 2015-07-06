@@ -1,0 +1,36 @@
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_a
+CALL in 0 t2
+PARAM t2  
+CALL to_int 1 t3
+ASSIGN t3  sym_0_b
+CALL in 0 t4
+PARAM t4  
+CALL to_int 1 t5
+ASSIGN t5  sym_0_c
+JUMP L0  
+LABEL sym_0_f_orderAB  
+ASSIGN sym_0_a  sym_0_t
+ASSIGN sym_0_b  sym_0_a
+ASSIGN sym_0_t  sym_0_b
+RETURN   
+LABEL L0  
+JUMP L1  
+LABEL sym_0_f_orderBC  
+ASSIGN sym_0_b  sym_0_t
+ASSIGN sym_0_c  sym_0_b
+ASSIGN sym_0_t  sym_0_c
+RETURN   
+LABEL L1  
+CALL sym_0_f_orderAB 0 
+CALL sym_0_f_orderBC 0 
+CALL sym_0_f_orderAB 0 
+PLUS sym_0_a " " t10
+PLUS t10 sym_0_b t9
+PLUS t9 " " t8
+PLUS t8 sym_0_c t7
+PLUS t7 "\n" t6
+PARAM t6  
+CALL out 1 
