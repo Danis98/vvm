@@ -44,7 +44,8 @@ int main(int argc, const char* argv[]){
 	
 	inFile.open(filename);
 	
-	
+	//Parse the input file into a list of commands
+	parse();
 	
 	return 0;
 }

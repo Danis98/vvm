@@ -4,13 +4,7 @@
 #include <map>
 #include <string>
 
-union var_value{
-	std::string str;
-	int i;
-	double d;
-	bool b;
-};
-
+//Types of variables
 enum var_type{
 	INT,
 	DOUBLE,
@@ -21,9 +15,14 @@ enum var_type{
 
 extern std::string var_types_str[];
 
+//Variable contents
 struct variable{
-	var_type type;
-	var_value val;
+	enum var_type type;
+	//Possible values
+	std::string str;
+	int i;
+	double d;
+	bool b;
 };
 
 typedef std::string var_id;

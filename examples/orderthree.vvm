@@ -15,14 +15,14 @@ LABEL sym_0_f_orderAB
 ASSIGN sym_0_a  sym_0_t
 ASSIGN sym_0_b  sym_0_a
 ASSIGN sym_0_t  sym_0_b
-RETURN   
+RETURN  null 
 LABEL L0  
 JUMP L1  
 LABEL sym_0_f_orderBC  
 ASSIGN sym_0_b  sym_0_t
 ASSIGN sym_0_c  sym_0_b
 ASSIGN sym_0_t  sym_0_c
-RETURN   
+RETURN   null
 LABEL L1  
 CALL sym_0_f_orderAB 0 
 CALL sym_0_f_orderBC 0 

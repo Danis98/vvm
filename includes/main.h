@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <sys/stat.h>
 
+#include <parser.h>
+
 extern std::ifstream inFile;
 
 //Command line arguments parsing

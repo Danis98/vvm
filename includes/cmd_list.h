@@ -5,6 +5,33 @@
 
 typedef std::string operand;
 
+enum cmd_type{
+	ADD,
+	SUB,
+	MULT,
+	DIV,
+	MOD,
+	ASSIGN,
+	PARAM,
+	CALL,
+	JUMP,
+	JUMPIF,
+	JUMPNIF,
+	LABEL,
+	CEQ,
+	CNE,
+	CLT,
+	CLE,
+	CGT,
+	CGE,
+	RET
+};
+
+extern int cmd_num;
+extern std::string cmd_str[];
+
+cmd_type get_cmd(std::string cmd);
+
 struct cmd{
 	cmd_type type;
 	operand a1, a2, r;

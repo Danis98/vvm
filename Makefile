@@ -7,7 +7,9 @@ INCLUDE_DIR = ./includes/
 CPP_FLAGS = -std=c++11 -I$(INCLUDE_DIR)
 
 EXEC_NAME = vvm
-OBJS = main.o
+
+OBJS = parser.o		\
+main.o				\
 
 ifeq ($(OS), Windows_NT)
 	EXEC_SUFFIX = .exe
@@ -18,7 +20,7 @@ endif
 #################################
 
 all: $(OBJS)
-	g++ $< -o $(EXEC_NAME) $(CPP_FLAGS)
+	g++ $(OBJS) -o $(EXEC_NAME) $(CPP_FLAGS)
 
 %.o: %.cpp
 	g++ -c -o $@ $< $(CPP_FLAGS)
