@@ -5,6 +5,7 @@
 
 typedef std::string operand;
 
+//Possible commands
 enum cmd_type{
 	ADD,
 	SUB,
@@ -32,6 +33,7 @@ extern std::string cmd_str[];
 
 cmd_type get_cmd(std::string cmd);
 
+//Command
 struct cmd{
 	cmd_type type;
 	operand a1, a2, r;

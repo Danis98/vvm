@@ -1,5 +1,5 @@
 #################################
-#			VARIABLES			#
+#	   VARIABLES		#
 #################################
 
 INCLUDE_DIR = ./includes/
@@ -16,7 +16,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 #################################
-#		COMPILATION RULES		#
+#	COMPILATION RULES	#
 #################################
 
 all: $(OBJS)
