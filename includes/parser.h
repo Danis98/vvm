@@ -3,7 +3,6 @@
 
 #include <main.h>
 #include <cmd_list.h>
-#include <variable_map.h>
 #include <sstream>
 
 //Operands required by each operator

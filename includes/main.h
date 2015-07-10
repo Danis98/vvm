@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <sys/stat.h>
 
+#include <variable_map.h>
 #include <parser.h>
 
 extern std::ifstream inFile;

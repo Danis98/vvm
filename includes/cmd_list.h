@@ -34,7 +34,7 @@ extern std::string cmd_str[];
 cmd_type get_cmd(std::string cmd);
 
 //Command
-struct cmd{
+struct cmd_t{
 	cmd_type type;
 	operand a1, a2, r;
 	
@@ -43,7 +43,7 @@ struct cmd{
 	}
 };
 
-typedef std::vector<cmd> cmd_list;
+typedef std::vector<cmd_t> cmd_list;
 
 extern cmd_list cmds;
 

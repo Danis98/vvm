@@ -10,6 +10,8 @@ EXEC_NAME = vvm
 
 OBJS = parser.o		\
 main.o				\
+runtime/executer.o	\
+runtime/typecheck.o	\
 
 ifeq ($(OS), Windows_NT)
 	EXEC_SUFFIX = .exe
