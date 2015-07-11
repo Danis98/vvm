@@ -42,7 +42,7 @@ PARAM "\n"
 CALL out 1 
 JUMP L3  
 LABEL L4  
-RETURN  null 
+RETURN null  
 LABEL L0  
 PARAM sym_0_a  
 CALL sym_0_f_printTable 1 

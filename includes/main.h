@@ -8,6 +8,10 @@
 
 #include <variable_map.h>
 #include <parser.h>
+#include <label_list.h>
+#include <func_stacks.h>
+
+#include <executer.h>
 
 extern std::ifstream inFile;
 

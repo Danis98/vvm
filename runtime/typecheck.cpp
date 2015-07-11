@@ -1,4 +1,4 @@
-#include <typecheck>
+#include <typecheck.h>
 
 var_type determine_res_type(var_type a, var_type b){
 	if(a==b)

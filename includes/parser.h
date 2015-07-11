@@ -3,6 +3,7 @@
 
 #include <main.h>
 #include <cmd_list.h>
+#include <label_list.h>
 #include <sstream>
 
 //Operands required by each operator

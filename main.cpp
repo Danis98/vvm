@@ -4,6 +4,12 @@
 cmd_list cmds;
 //Variables and their characteristics
 variable_map var_map;
+//Labels
+label_list labels;
+//Function calling stuff
+param_stack par_stack;
+formal_params_stack formal_stack;
+return_stack ret_stack;
 
 std::ifstream inFile;
 
@@ -46,6 +52,8 @@ int main(int argc, const char* argv[]){
 	
 	//Parse the input file into a list of commands
 	parse();
+	//Execute it!
+	execute();
 	
 	return 0;
 }

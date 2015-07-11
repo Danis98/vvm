@@ -16,13 +16,41 @@ enum var_type{
 extern std::string var_types_str[];
 
 //Variable contents
-struct variable{
-	enum var_type type;
-	//Possible values
-	std::string str;
-	int i;
-	double d;
-	bool b;
+class variable{
+public:
+	var_type type=UNINITIALIZED;
+};
+
+class str_var : public variable{
+public:
+	std::string val;
+	str_var(std::string val) : val(val){
+		type=STRING;
+	}
+};
+
+class int_var : public variable{
+public:
+	int val;
+	int_var(int val) : val(val){
+		type=INT;
+	}
+};
+
+class double_var : public variable{
+public:
+	double val;
+	double_var(double val) : val(val){
+		type=DOUBLE;
+	}
+};
+
+class bool_var : public variable{
+public:
+	bool val;
+	bool_var(bool val) : val(val){
+		type=BOOL;
+	}
 };
 
 typedef std::string var_id;

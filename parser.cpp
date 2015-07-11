@@ -268,10 +268,12 @@ void parse_line(std::string line){
 	if(accum!="")
 		SET_ARG(req);
 	
-	std::cout<<"[CMD] "<<cmd<<":\n"
+	/*std::cout<<"[CMD] "<<cmd<<":\n"
 		<<"\ta1 = "<<a1<<"\n"
 		<<"\ta2 = "<<a2<<"\n"
-		<<"\tr  = "<<r<<"\n";
+		<<"\tr  = "<<r<<"\n";*/
+	
+	if(cmd=="LABEL") labels[a1]=line_num-1;
 	
 	cmds.push_back({get_cmd(cmd), a1, a2, r});
 }
