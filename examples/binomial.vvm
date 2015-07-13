@@ -1,0 +1,48 @@
+PARAM "Input n: "  
+CALL out 1 
+CALL in 0 t0
+PARAM t0  
+CALL to_int 1 t1
+ASSIGN t1  sym_0_n
+PARAM "Input m: "  
+CALL out 1 
+CALL in 0 t2
+PARAM t2  
+CALL to_int 1 t3
+ASSIGN t3  sym_0_m
+JUMP L0  
+LABEL sym_0_f_factorial  
+ASSIGN param_0  sym_0_0_a
+ASSIGN 1  sym_0_0_0_f
+ASSIGN 2  sym_0_0_0_i
+LABEL L1  
+LESSEQ sym_0_0_0_i sym_0_0_a t4
+JUMPNIF t4 L2 
+MULT sym_0_0_0_f sym_0_0_0_i t5
+ASSIGN t5  sym_0_0_0_f
+JUMP L1  
+LABEL L2  
+RETURN sym_0_0_0_f  
+LABEL L0  
+JUMP L3  
+LABEL sym_0_f_binomial  
+ASSIGN param_0  sym_0_1_n
+ASSIGN param_1  sym_0_1_m
+SUB sym_0_1_n sym_0_1_m t8
+PARAM t8  
+CALL sym_0_f_factorial 1 t9
+PARAM sym_0_1_m  
+CALL sym_0_f_factorial 1 t10
+MULT t10 t9 t7
+PARAM sym_0_1_n  
+CALL sym_0_f_factorial 1 t11
+DIV t11 t7 t6
+RETURN t6  
+LABEL L3  
+PARAM sym_0_m  
+PARAM sym_0_n  
+CALL sym_0_f_binomial 2 t14
+PLUS "Binomial (n m) : " t14 t13
+PLUS t13 "\n" t12
+PARAM t12  
+CALL out 1 

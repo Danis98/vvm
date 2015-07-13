@@ -11,11 +11,11 @@ PLUS t6 sym_0_b t5
 PLUS t5 " = " t4
 PARAM t4  
 CALL out 1 
+PARAM 2  
 PARAM sym_0_b  
-PARAM 2  
 CALL pow 2 t8
-PARAM sym_0_a  
 PARAM 2  
+PARAM sym_0_a  
 CALL pow 2 t9
 PLUS t9 t8 t7
 PARAM t7  

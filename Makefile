@@ -9,9 +9,10 @@ CPP_FLAGS = -std=c++11 -I$(INCLUDE_DIR)
 EXEC_NAME = vvm
 
 OBJS = parser.o		\
-main.o				\
+main.o			\
 runtime/executer.o	\
 runtime/typecheck.o	\
+runtime/builtin_funcs.o	\
 
 ifeq ($(OS), Windows_NT)
 	EXEC_SUFFIX = .exe
@@ -32,4 +33,4 @@ clean: clean_tmp
 		rm -f vvm$(EXEC_SUFFIX)
 
 clean_tmp:
-	rm -rf *~ *.o
+	rm -rf *~ *.o runtime/*.o

@@ -2,6 +2,7 @@
 #define _CMD_LIST_H
 
 #include <vector>
+#include <string>
 
 typedef std::string operand;
 

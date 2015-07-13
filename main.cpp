@@ -10,6 +10,7 @@ label_list labels;
 param_stack par_stack;
 formal_params_stack formal_stack;
 return_stack ret_stack;
+call_addr_stack call_stack;
 
 std::ifstream inFile;
 

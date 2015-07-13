@@ -19,38 +19,21 @@ extern std::string var_types_str[];
 class variable{
 public:
 	var_type type=UNINITIALIZED;
-};
-
-class str_var : public variable{
-public:
-	std::string val;
-	str_var(std::string val) : val(val){
-		type=STRING;
-	}
-};
-
-class int_var : public variable{
-public:
-	int val;
-	int_var(int val) : val(val){
-		type=INT;
-	}
-};
-
-class double_var : public variable{
-public:
-	double val;
-	double_var(double val) : val(val){
-		type=DOUBLE;
-	}
-};
-
-class bool_var : public variable{
-public:
-	bool val;
-	bool_var(bool val) : val(val){
-		type=BOOL;
-	}
+	std::string val="";
+	variable(){}
+	variable(var_type type, std::string val) : type(type), val(val) {}
+	bool checkTrue(){
+		switch(type){
+		case INT:
+			return val!="0";
+		case DOUBLE:
+			return val!="0";
+		case BOOL:
+			return val=="true";
+		case STRING:
+			return val!="";
+		}
+	};
 };
 
 typedef std::string var_id;

@@ -44,6 +44,7 @@
 	}					\
 
 int line_num=0;
+int instr_num;
 
 std::string var_types_str[]={
 	"int",
@@ -162,6 +163,7 @@ void parse(){
 		line_num++;
 		parse_line(line);
 	}
+	instr_num=line_num;
 }
 
 //Parse a single line

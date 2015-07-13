@@ -1,40 +1,47 @@
 #ifndef _EXECUTER_H
 #define _EXECUTER_H
 
-#include <iostream>
 #include <cmd_list.h>
 #include <variable_map.h>
 #include <label_list.h>
 #include <func_stacks.h>
 #include <typecheck.h>
-#include <regex>
-#include <sstream>
+#include <lex_cast.h>
+#include <token_type.h>
+#include <builtin_funcs.h>
 
-enum sym_type{
-	SYM_IDENTIFIER,
-	SYM_INT,
-	SYM_DOUBLE,
-	SYM_BOOL,
-	SYM_STRING
-};
-
-extern int sys_funcs_num;
-extern std::string sys_funcs[];
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstring>
 
 void execute();
 void exec_instr(int index);
 void execute_math_op(cmd_t cmd);
+void assign(std::string a, std::string b);
+int get_par_num(std::string id);
 
-sym_type get_symbol_type(std::string sym);
+extern int instr_num;
 
-template <typename T>
-inline T lexical_cast(const std::string& str)
-{
-    T var;
-    std::istringstream iss;
-    iss.str(str);
-    iss >> var;
-    return var;
+inline bool is_int(std::string s){
+	for(int i=0;i<s.length();i++)
+		if(s[i]<'0' || s[i]>'9')
+			return false;
+	return true;
+}
+
+inline bool is_double(std::string s){
+	bool dot=false;
+	for(int i=0;i<s.length();i++){
+		if(s[i]=='.' && !dot)
+			dot=true;
+		if(s[i]=='.' && dot)
+			return false;
+		if(s[i]<'0' || s[i]>'9'
+			|| s[i]!='.')
+			return false;
+	}
+	return true;
 }
 
 #endif

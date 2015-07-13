@@ -24,4 +24,9 @@ typedef std::stack<param> return_stack;
 
 extern return_stack ret_stack;
 
+//Call stack
+typedef std::stack<int> call_addr_stack;
+
+extern call_addr_stack call_stack;
+
 #endif
