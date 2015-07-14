@@ -21,9 +21,11 @@ std::vector<std::string> sys_funcs={
 void sys_out(){
 	std::string v=formal_stack.top()[0];
 	tok_type t=get_token_type(v);
-	if(t==TOK_IDENTIFIER)
-		std::cout<<var_map[formal_stack.top()[0]].val;
-	else if(t==TOK_STRING){
+	if(t==TOK_IDENTIFIER){
+		v=var_map[v].val;
+		t=get_token_type(v);
+	}
+	if(t==TOK_STRING){
 		std::cout<<v.substr(1, v.size()-2);
 	}
 	else

@@ -19,11 +19,11 @@ int instr_ptr=0;
 
 void execute(){
 	while(instr_ptr<instr_num){
-		std::cout<<"Executing instr "<<instr_ptr+1<<"\n";
 		exec_instr(instr_ptr);
+		//print_status();
 	}
 	
-	std::cout<<"Variable values:\n";
+	std::cout<<"Final variable values:\n";
 	for(variable_map::const_iterator it=var_map.begin();it!=var_map.end();it++)
 		std::cout<<it->first<<" ["<<var_types_str[(int)(it->second.type)]<<"] ->\t\t"<<it->second.val<<"\n";
 }
@@ -45,13 +45,13 @@ void exec_instr(int index){
 		assign(cmd.r, cmd.a1);
 	//Function calling and returning
 	else if(cmd.type==PARAM)
-		par_stack.push(cmd.a1);
+		par_stack.push_back(cmd.a1);
 	else if(cmd.type==CALL){
 		if(cmd.r!="") ret_stack.push(cmd.r);
 		formal_params formal;
 		for(int i=0;i<lexical_cast<int>(cmd.a2);i++){
-			formal.push_back(par_stack.top());
-			par_stack.pop();
+			formal.push_back(par_stack[par_stack.size()-1]);
+			par_stack.pop_back();
 		}
 		formal_stack.push(formal);
 		if(std::find(sys_funcs.begin(), sys_funcs.end(), cmd.a1)==sys_funcs.end()){
@@ -116,7 +116,6 @@ void assign(std::string a, std::string b){
 		b=formal_stack.top()[get_par_num(b)];
 		expr_type=get_token_type(b);
 	}
-	std::cout<<a<<" := "<<b<<"\n";
 	if(var_map[a].type==UNINITIALIZED){
 		var_type res_type;
 		TOK_TYPE_TO_VAR_TYPE(expr_type, res_type, b);
@@ -145,7 +144,7 @@ void assign(std::string a, std::string b){
 
 void execute_math_op(cmd_t cmd){
 	var_type a_type, b_type, r_type;
-	std::string a_val, b_val;
+	std::string a_val, b_val, r_val;
 	tok_type tok_a=get_token_type(cmd.a1);
 	TOK_TYPE_TO_VAR_TYPE(tok_a, a_type, cmd.a1);
 	tok_type tok_b=get_token_type(cmd.a2);
@@ -156,14 +155,94 @@ void execute_math_op(cmd_t cmd){
 	b_val=tok_b==TOK_IDENTIFIER?var_map[cmd.a2].val:cmd.a2;
 	
 	//Handle logical operators
-	
+	switch(cmd.type){
+		case CEQ:
+			r_val=a_val==b_val?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+		case CNE:
+			r_val=a_val!=b_val?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+		case CLT:
+			if(a_type!=INT && a_type!=DOUBLE
+				|| b_type!=INT && b_type!=DOUBLE)
+				fatal("Operator "+cmd_str[(int)cmd.type]+" undefined for operands "
+					+var_types_str[(int)a_type]+", "+var_types_str[(int)b_type]+"\n");
+			r_val=lexical_cast<double>(a_val) < lexical_cast<double>(b_val)?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+		case CLE:
+			if(a_type!=INT && a_type!=DOUBLE
+				|| b_type!=INT && b_type!=DOUBLE)
+				fatal("Operator "+cmd_str[(int)cmd.type]+" undefined for operands "
+					+var_types_str[(int)a_type]+", "+var_types_str[(int)b_type]+"\n");
+			r_val=lexical_cast<double>(a_val) <= lexical_cast<double>(b_val)?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+		case CGT:
+			if(a_type!=INT && a_type!=DOUBLE
+				|| b_type!=INT && b_type!=DOUBLE)
+				fatal("Operator "+cmd_str[(int)cmd.type]+" undefined for operands "
+					+var_types_str[(int)a_type]+", "+var_types_str[(int)b_type]+"\n");
+			r_val=lexical_cast<double>(a_val) > lexical_cast<double>(b_val)?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+		case CGE:
+			if(a_type!=INT && a_type!=DOUBLE
+				|| b_type!=INT && b_type!=DOUBLE)
+				fatal("Operator "+cmd_str[(int)cmd.type]+" undefined for operands "
+					+var_types_str[(int)a_type]+", "+var_types_str[(int)b_type]+"\n");
+			r_val=lexical_cast<double>(a_val) >= lexical_cast<double>(b_val)?"true":"false";
+			var_map[cmd.r]={BOOL, r_val};
+			return;
+	}
 	
 	//Handle mathematical operators
+	//String concatenation
 	if(r_type==STRING && cmd.type==ADD)
-		var_map[cmd.r].val=(a_type==STRING?cmd.a1.substr(0, cmd.a1.size()-1):cmd.a1)+
-				(b_type==STRING?cmd.a2.substr(1, cmd.a2.size()-1):cmd.a2);
-	else if(r_type==STRING){
-		std::cout<<"Unsupported string operation: "<<cmd.type<<"\n";
+		var_map[cmd.r]={STRING, (a_type==STRING?cmd.a1.substr(0, cmd.a1.size()-1):cmd.a1)+
+				(b_type==STRING?cmd.a2.substr(1, cmd.a2.size()-1):cmd.a2)};
+	else if(r_type==STRING)
+		fatal("Unsupported string operation: "+cmd_str[(int)cmd.type]+"\n");
+	//Numerical
+	//Bools don't have other compatible operands yet
+	if(a_type==BOOL || b_type==BOOL)
+		fatal("Mathematical operator "+cmd_str[(int)cmd.type]+" on bool values\n");
+	
+	switch(cmd.type){
+	case ADD:
+		if(r_type==INT)
+			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)+lexical_cast<int>(b_val))};
+		else if(r_type==DOUBLE)
+			var_map[cmd.r]={r_type, to_string<double>(lexical_cast<double>(a_val)+lexical_cast<double>(b_val))};
+		return;
+	case SUB:
+		if(r_type==INT)
+			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)-lexical_cast<int>(b_val))};
+		else if(r_type==DOUBLE)
+			var_map[cmd.r]={r_type, to_string<double>(lexical_cast<double>(a_val)-lexical_cast<double>(b_val))};
+		return;
+	case MULT:
+		if(r_type==INT)
+			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)*lexical_cast<int>(b_val))};
+		else if(r_type==DOUBLE)
+			var_map[cmd.r]={r_type, to_string<double>(lexical_cast<double>(a_val)*lexical_cast<double>(b_val))};
+		return;
+	case DIV:
+		if(r_type==INT)
+			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)/lexical_cast<int>(b_val))};
+		else if(r_type==DOUBLE)
+			var_map[cmd.r]={r_type, to_string<double>(lexical_cast<double>(a_val)/lexical_cast<double>(b_val))};
+		return;
+	case MOD:
+		if(r_type==INT)
+			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)%lexical_cast<int>(b_val))};
+		else if(r_type==DOUBLE)
+			fatal("Operator MOD undefined for operands "+var_types_str[(int)a_type]+", "+var_types_str[(int)b_type]+"\n");
+		return;
+	default:
+		fatal("Undefined operator "+cmd_str[(int)cmd.type]+"\n");
 	}
 }
 
@@ -191,4 +270,24 @@ tok_type get_token_type(std::string tok){
 		exit(0);
 	}
 	return t;
+}
+
+void print_status(){
+	if(instr_ptr==instr_num) return;
+	std::cout<<"---------------------------------------\n";
+	std::cout<<"INSTR: "<<instr_ptr<<" / "<<instr_num<<"\n";
+	std::cout<<cmd_str[(int)(cmds[instr_ptr].type)]<<"{"<<cmds[instr_ptr].a1<<", "<<cmds[instr_ptr].a2<<"} = "<<cmds[instr_ptr].r<<"\n";
+	std::cout<<"VARIABLES\n";
+	for(variable_map::const_iterator it=var_map.begin();it!=var_map.end();it++)
+		std::cout<<(it->first)<<" ->\t"<<(it->second.val)<<"\n";
+	std::cout<<"FORMAL PARAMS:\n";
+	if(formal_stack.size()>0)
+		for(formal_params::const_iterator it=formal_stack.top().begin();it!=formal_stack.top().end();it++)
+			std::cout<<*it<<" ";
+	std::cout<<"\n";
+	std::cout<<"PARAM_STACK:\n";
+	if(par_stack.size()>0)
+		for(param_stack::const_iterator it=par_stack.begin();it!=par_stack.end();it++)
+			std::cout<<*it<<" ";
+	std::cout<<"---------------------------------------\n";
 }

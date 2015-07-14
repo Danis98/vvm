@@ -7,7 +7,7 @@
 
 typedef std::string param;
 
-typedef std::stack<param> param_stack;
+typedef std::vector<param> param_stack;
 
 extern param_stack par_stack;
 

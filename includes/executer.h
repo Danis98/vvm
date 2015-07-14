@@ -9,6 +9,7 @@
 #include <lex_cast.h>
 #include <token_type.h>
 #include <builtin_funcs.h>
+#include <fatal_error.h>
 
 #include <iostream>
 #include <vector>
@@ -20,6 +21,8 @@ void exec_instr(int index);
 void execute_math_op(cmd_t cmd);
 void assign(std::string a, std::string b);
 int get_par_num(std::string id);
+
+void print_status();
 
 extern int instr_num;
 
