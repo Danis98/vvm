@@ -19,7 +19,15 @@ std::vector<std::string> sys_funcs={
 };
 
 void sys_out(){
-	std::cout<<var_map[formal_stack.top()[0]].val;
+	std::string v=formal_stack.top()[0];
+	tok_type t=get_token_type(v);
+	if(t==TOK_IDENTIFIER)
+		std::cout<<var_map[formal_stack.top()[0]].val;
+	else if(t==TOK_STRING){
+		std::cout<<v.substr(1, v.size()-2);
+	}
+	else
+		std::cout<<v;
 	formal_stack.pop();
 }
 
@@ -35,7 +43,9 @@ void sys_in(){
 void sys_to_int(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
-	assign(r, "param_0");
+	std::string val=formal_stack.top()[0];
+	val=val.substr(1, val.length()-2);
+	assign(r, val);
 	var_map[r].type=INT;
 	formal_stack.pop();
 }
@@ -43,7 +53,9 @@ void sys_to_int(){
 void sys_to_double(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
-	assign(r, "param_0");
+	std::string val=formal_stack.top()[0];
+	val=val.substr(1, val.length()-2);
+	assign(r, val);
 	var_map[r].type=DOUBLE;
 	formal_stack.pop();
 }
@@ -51,7 +63,9 @@ void sys_to_double(){
 void sys_to_string(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
-	assign(r, "param_0");
+	std::string val=formal_stack.top()[0];
+	val='"'+val+'"';
+	assign(r, val);
 	var_map[r].type=STRING;
 	formal_stack.pop();
 }

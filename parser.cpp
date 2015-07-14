@@ -210,8 +210,10 @@ void parse_line(std::string line){
 			}
 			else{
 				//Exiting the string
-				if(ch=='"')
+				if(ch=='"'){
+					accum+=ch;
 					in_string=false;
+				}
 				//Begin escape sequence
 				else if(ch=='\\')
 					escape_sequence=true;
@@ -229,6 +231,7 @@ void parse_line(std::string line){
 			}
 			//Entering a string
 			if(ch=='"'){
+				accum+=ch;
 				in_string=true;
 				begin=false;
 			}
@@ -270,10 +273,11 @@ void parse_line(std::string line){
 	if(accum!="")
 		SET_ARG(req);
 	
-	/*std::cout<<"[CMD] "<<cmd<<":\n"
-		<<"\ta1 = "<<a1<<"\n"
-		<<"\ta2 = "<<a2<<"\n"
-		<<"\tr  = "<<r<<"\n";*/
+	if(parser_dbg)
+		std::cout<<"[CMD] "<<cmd<<":\n"
+			<<"\ta1 = "<<a1<<"\n"
+			<<"\ta2 = "<<a2<<"\n"
+			<<"\tr  = "<<r<<"\n";
 	
 	if(cmd=="LABEL") labels[a1]=line_num-1;
 	

@@ -22,6 +22,10 @@ void execute(){
 		std::cout<<"Executing instr "<<instr_ptr+1<<"\n";
 		exec_instr(instr_ptr);
 	}
+	
+	std::cout<<"Variable values:\n";
+	for(variable_map::const_iterator it=var_map.begin();it!=var_map.end();it++)
+		std::cout<<it->first<<" ["<<var_types_str[(int)(it->second.type)]<<"] ->\t\t"<<it->second.val<<"\n";
 }
 
 void exec_instr(int index){
@@ -168,20 +172,23 @@ int get_par_num(std::string id){
 }
 
 tok_type get_token_type(std::string tok){
+	tok_type t;
 	if(is_int(tok))
-		return TOK_INT;
+		t=TOK_INT;
 	else if(is_double(tok))
-		return TOK_DOUBLE;
+		t=TOK_DOUBLE;
 	else if(tok=="true" || tok=="false")
-		return TOK_BOOL;
+		t=TOK_BOOL;
 	else if(tok[0]=='"' && tok[tok.length()-1]=='"')
-		return TOK_STRING;
+		t=TOK_STRING;
 	else if(strncmp(tok.c_str(), "sym_", 4)==0
 		|| strncmp(tok.c_str(), "t", 1)==0)
-		return TOK_IDENTIFIER;
+		t=TOK_IDENTIFIER;
 	else if(strncmp(tok.c_str(), "param_", 6)==0)
-		return TOK_PARAM;
-	else 
-	std::cout<<"Invalid token "<<tok<<"\n";
-	exit(0);
+		t=TOK_PARAM;
+	else{
+		std::cout<<"Invalid token "<<tok<<"\n";
+		exit(0);
+	}
+	return t;
 }

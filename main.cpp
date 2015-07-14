@@ -14,6 +14,8 @@ call_addr_stack call_stack;
 
 std::ifstream inFile;
 
+bool parser_dbg=false;
+
 void wrong_usage_msg(int arg_num){
 	std::cout<<"[USAGE] vvm <input file>, "<<
 		arg_num<<" args supplied\n";

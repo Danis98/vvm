@@ -10,6 +10,7 @@
 extern int req_ops[];
 
 extern int line_num;
+extern bool parser_dbg;
 
 void parse();
 void parse_line(std::string line);

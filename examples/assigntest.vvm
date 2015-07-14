@@ -1,11 +1,12 @@
 ASSIGN 0  sym_0_c
-ASSIGN 0  sym_0_b
-ASSIGN 0  sym_0_a
+ASSIGN 1  sym_0_b
+ASSIGN 2  sym_0_a
 JUMP L0  
 LABEL sym_0_f_lol  
-ASSIGN sym_0_a  sym_0_b
-ASSIGN sym_0_c  sym_0_a
-ASSIGN sym_0_b  sym_0_c
+ASSIGN sym_0_a  sym_0_0_0_t
+ASSIGN sym_0_b  sym_0_a
+ASSIGN sym_0_c  sym_0_b
+ASSIGN sym_0_0_0_t  sym_0_c
 RETURN sym_0_b  
 LABEL L0  
 CALL sym_0_f_lol 0 t0
