@@ -36,15 +36,15 @@ inline bool is_int(std::string s){
 inline bool is_double(std::string s){
 	bool dot=false;
 	for(int i=0;i<s.length();i++){
-		if(s[i]=='.' && !dot)
-			dot=true;
 		if(s[i]=='.' && dot)
 			return false;
-		if(s[i]<'0' || s[i]>'9'
-			|| s[i]!='.')
+		if(s[i]=='.' && !dot)
+			dot=true;
+		if((s[i]<'0' || s[i]>'9')
+			&& s[i]!='.')
 			return false;
 	}
-	return true;
+	return dot;
 }
 
 #endif

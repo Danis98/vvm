@@ -12,25 +12,35 @@ CALL to_int 1 t5
 ASSIGN t5  sym_0_c
 JUMP L0  
 LABEL sym_0_f_orderAB  
+GREAT sym_0_a sym_0_b t6
+JUMPNIF t6 L1 
 ASSIGN sym_0_a  sym_0_t
 ASSIGN sym_0_b  sym_0_a
 ASSIGN sym_0_t  sym_0_b
+JUMP L2  
+LABEL L1  
+LABEL L2  
 RETURN null  
 LABEL L0  
-JUMP L1  
+JUMP L3  
 LABEL sym_0_f_orderBC  
+GREAT sym_0_b sym_0_c t7
+JUMPNIF t7 L4 
 ASSIGN sym_0_b  sym_0_t
 ASSIGN sym_0_c  sym_0_b
 ASSIGN sym_0_t  sym_0_c
+JUMP L5  
+LABEL L4  
+LABEL L5  
 RETURN null  
-LABEL L1  
+LABEL L3  
 CALL sym_0_f_orderAB 0 
 CALL sym_0_f_orderBC 0 
 CALL sym_0_f_orderAB 0 
-PLUS sym_0_a " " t10
-PLUS t10 sym_0_b t9
-PLUS t9 " " t8
-PLUS t8 sym_0_c t7
-PLUS t7 "\n" t6
-PARAM t6  
+PLUS sym_0_a " " t12
+PLUS t12 sym_0_b t11
+PLUS t11 " " t10
+PLUS t10 sym_0_c t9
+PLUS t9 "\n" t8
+PARAM t8  
 CALL out 1 

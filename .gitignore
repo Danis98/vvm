@@ -1,2 +1,7 @@
 *.exe
 *.o
+
+update_examples.cmd
+commit_changes.cmd
+
+math_test.*

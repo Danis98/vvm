@@ -1,7 +1,7 @@
 #include <builtin_funcs.h>
 
 #define EXTRACT_VALUE(id)				\
-s_##id==TOK_DOUBLE? val_##id=lexical_cast<double>(id):	\
+s_##id==TOK_DOUBLE || s_##id==TOK_INT? val_##id=lexical_cast<double>(id):	\
 	(s_##id==TOK_IDENTIFIER? val_##id=lexical_cast<double>(var_map[id].val):\
 	val_##id=0)
 
@@ -35,7 +35,7 @@ void sys_out(){
 
 void sys_in(){
 	std::string s;
-	std::cin>>s;
+	std::getline(std::cin, s);
 	std::string r=ret_stack.top();
 	ret_stack.pop();
 	assign(r, '"'+s+'"');
@@ -46,7 +46,17 @@ void sys_to_int(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
 	std::string val=formal_stack.top()[0];
-	val=val.substr(1, val.length()-2);
+	tok_type t=get_token_type(val);
+	if(t==TOK_IDENTIFIER){
+		val=var_map[val].val;
+		t=get_token_type(val);
+	}
+	if(t==TOK_STRING)
+		val=val.substr(1, val.length()-2);
+	else if(t==TOK_DOUBLE)
+		val=to_string<int>((int)lexical_cast<double>(val));
+	else if(t==TOK_BOOL)
+		val=val=="true"?"1":"0";
 	assign(r, val);
 	var_map[r].type=INT;
 	formal_stack.pop();
@@ -56,7 +66,17 @@ void sys_to_double(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
 	std::string val=formal_stack.top()[0];
-	val=val.substr(1, val.length()-2);
+	tok_type t=get_token_type(val);
+	if(t==TOK_IDENTIFIER){
+		val=var_map[val].val;
+		t=get_token_type(val);
+	}
+	if(t==TOK_STRING)
+		val=val.substr(1, val.length()-2);
+	else if(t==TOK_DOUBLE)
+		val=to_string<double>((double)lexical_cast<int>(val));
+	else if(t==TOK_BOOL)
+		val=val=="true"?"1":"0";
 	assign(r, val);
 	var_map[r].type=DOUBLE;
 	formal_stack.pop();
@@ -66,7 +86,13 @@ void sys_to_string(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
 	std::string val=formal_stack.top()[0];
-	val='"'+val+'"';
+	tok_type t=get_token_type(val);
+	if(t==TOK_IDENTIFIER){
+		val=var_map[val].val;
+		t=get_token_type(val);
+	}
+	if(t!=TOK_STRING)
+		val='"'+val+'"';
 	assign(r, val);
 	var_map[r].type=STRING;
 	formal_stack.pop();

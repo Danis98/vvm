@@ -33,5 +33,7 @@ PLUS t12 t11 t10
 PLUS t10 "\n" t9
 PARAM t9  
 CALL out 1 
+PLUS sym_0_i 1 t13
+ASSIGN t13  sym_0_i
 JUMP L3  
 LABEL L4  

@@ -4,19 +4,41 @@ DIV t4 t3 t2
 PARAM 2  
 PARAM 3  
 CALL pow 2 t5
-SUB t5 t2 t1
+PARAM t5  
+CALL to_int 1 t6
+SUB t6 t2 t1
 MOD t1 2 t0
-MULT 5 2 t7
-PLUS t7 1 t6
-PLUS 3 1 t12
-MOD t12 1 t11
-DIV 5 t11 t10
-MOD 2 3 t13
-PLUS t13 t10 t9
-PLUS t9 2 t8
-PLUS 3 1 t18
-MOD t18 1 t17
-DIV t17 5 t16
-MOD 2 3 t19
-PLUS t19 t16 t15
-PLUS t15 2 t14
+ASSIGN t0  sym_0_a
+MULT 5 2 t8
+PLUS t8 1 t7
+ASSIGN t7  sym_0_b
+PLUS 3 1 t13
+DIV 5 t13 t12
+MOD t12 2 t11
+MOD 2 3 t14
+PLUS t14 t11 t10
+PLUS t10 2 t9
+ASSIGN t9  sym_0_c
+PLUS 3 1 t19
+MOD t19 2 t18
+DIV t18 5 t17
+MOD 2 3 t20
+PLUS t20 t17 t16
+PLUS t16 2 t15
+ASSIGN t15  sym_0_d
+SUB 1 0.23 t22
+MULT 2.5 0.12 t23
+PLUS t23 t22 t21
+ASSIGN t21  sym_0_e
+PLUS "a(1)=" sym_0_a t33
+PLUS t33 " b(11)=" t32
+PLUS t32 sym_0_b t31
+PLUS t31 " c(5)=" t30
+PLUS t30 sym_0_c t29
+PLUS t29 " d(4)=" t28
+PLUS t28 sym_0_d t27
+PLUS t27 " e(1.07)=" t26
+PLUS t26 sym_0_e t25
+PLUS t25 "\n" t24
+PARAM t24  
+CALL out 1 

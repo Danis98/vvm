@@ -240,7 +240,7 @@ void parse_line(std::string line){
 			else if(ch>='a' && ch<='z'
 				|| ch>='A' && ch<='Z'
 				|| ch>='0' && ch<='9'
-				|| ch=='_'){
+				|| ch=='_' || ch=='.'){
 				begin=false;
 				accum+=ch;
 			}

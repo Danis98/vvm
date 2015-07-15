@@ -12,13 +12,15 @@ LESSEQ sym_0_0_0_i sym_0_0_n t2
 JUMPNIF t2 L2 
 MULT sym_0_0_0_f sym_0_0_0_i t3
 ASSIGN t3  sym_0_0_0_f
+PLUS sym_0_0_0_i 1 t4
+ASSIGN t4  sym_0_0_0_i
 JUMP L1  
 LABEL L2  
 RETURN sym_0_0_0_f  
 LABEL L0  
 PARAM sym_0_n  
-CALL sym_0_f_factorial 1 t4
-PARAM t4  
-CALL to_string 1 t5
+CALL sym_0_f_factorial 1 t5
 PARAM t5  
+CALL to_string 1 t6
+PARAM t6  
 CALL out 1 

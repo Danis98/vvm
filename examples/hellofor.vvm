@@ -8,5 +8,7 @@ LESS sym_0_i sym_0_num t2
 JUMPNIF t2 L1 
 PARAM "Hello world!\n"  
 CALL out 1 
+PLUS sym_0_i 1 t3
+ASSIGN t3  sym_0_i
 JUMP L0  
 LABEL L1  

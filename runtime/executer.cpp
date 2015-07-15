@@ -16,16 +16,18 @@
 )
 
 int instr_ptr=0;
+bool final_dbg=false;
 
 void execute(){
 	while(instr_ptr<instr_num){
 		exec_instr(instr_ptr);
 		//print_status();
 	}
-	
-	std::cout<<"Final variable values:\n";
-	for(variable_map::const_iterator it=var_map.begin();it!=var_map.end();it++)
-		std::cout<<it->first<<" ["<<var_types_str[(int)(it->second.type)]<<"] ->\t\t"<<it->second.val<<"\n";
+	if(final_dbg){
+		std::cout<<"Final variable values:\n";
+		for(variable_map::const_iterator it=var_map.begin();it!=var_map.end();it++)
+			std::cout<<it->first<<" ["<<var_types_str[(int)(it->second.type)]<<"] ->\t\t"<<it->second.val<<"\n";
+	}
 }
 
 void exec_instr(int index){
@@ -125,13 +127,15 @@ void assign(std::string a, std::string b){
 			var_map[a]={res_type, b};
 	}
 	else{
-		if(var_map[a].type!=var_map[b].type){
+		var_type t;
+		TOK_TYPE_TO_VAR_TYPE(expr_type, t, b);
+		if(var_map[a].type!=(expr_type==TOK_IDENTIFIER?var_map[b].type:t)){
 			if(var_map[a].type==DOUBLE && var_map[b].type==INT
 				|| var_map[a].type==INT && var_map[b].type==DOUBLE)
 				var_map[a].type==DOUBLE;
 			else{
-				std::cout<<"Incompatible assignment: "<<var_types_str[var_map[a].type]
-					<<" := "<<var_types_str[var_map[b].type]<<"\n";
+				std::cout<<"Incompatible assignment: "<<a<<" := "<<b<<" ("<<var_types_str[var_map[a].type]
+					<<" := "<<var_types_str[var_map[b].type]<<"["<<expr_type<<"]) at line "<<instr_ptr+1<<"\n";
 				exit(0);
 			}
 		}
@@ -142,6 +146,7 @@ void assign(std::string a, std::string b){
 	}
 }
 
+//Math ops
 void execute_math_op(cmd_t cmd){
 	var_type a_type, b_type, r_type;
 	std::string a_val, b_val, r_val;
@@ -201,8 +206,8 @@ void execute_math_op(cmd_t cmd){
 	//Handle mathematical operators
 	//String concatenation
 	if(r_type==STRING && cmd.type==ADD)
-		var_map[cmd.r]={STRING, (a_type==STRING?cmd.a1.substr(0, cmd.a1.size()-1):cmd.a1)+
-				(b_type==STRING?cmd.a2.substr(1, cmd.a2.size()-1):cmd.a2)};
+		var_map[cmd.r]={STRING, (a_type==STRING?a_val.substr(0, a_val.size()-1):'"'+a_val)+
+				(b_type==STRING?b_val.substr(1, b_val.size()-1):b_val+'"')};
 	else if(r_type==STRING)
 		fatal("Unsupported string operation: "+cmd_str[(int)cmd.type]+"\n");
 	//Numerical
@@ -230,6 +235,8 @@ void execute_math_op(cmd_t cmd){
 			var_map[cmd.r]={r_type, to_string<double>(lexical_cast<double>(a_val)*lexical_cast<double>(b_val))};
 		return;
 	case DIV:
+		if(b_val=="0")
+			fatal("Division by 0 at line "+to_string<int>(instr_ptr+1)+"\n");
 		if(r_type==INT)
 			var_map[cmd.r]={r_type, to_string<int>(lexical_cast<int>(a_val)/lexical_cast<int>(b_val))};
 		else if(r_type==DOUBLE)
