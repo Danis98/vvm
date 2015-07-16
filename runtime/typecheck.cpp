@@ -8,8 +8,6 @@ var_type determine_res_type(var_type a, var_type b){
 		return DOUBLE;
 	else if(a==STRING || b==STRING)
 		return STRING;
-	else{
-		std::cout<<"Invalid operand types: "<<var_types_str[(int)a]<<", "<<var_types_str[(int)b]<<"\n";
-		exit(0);
-	}
+	else
+		fatal("Invalid operand types: "+var_types_str[(int)a]+", "+var_types_str[(int)b]+"\n");
 }

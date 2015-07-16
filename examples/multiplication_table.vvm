@@ -22,32 +22,53 @@ JUMP L1
 LABEL L2  
 PARAM "\n"  
 CALL out 1 
-ASSIGN 1  sym_0_0_0_i
+ASSIGN 0  sym_0_0_0_i
 LABEL L3  
-LESSEQ sym_0_0_0_i sym_0_0_n t5
+LESS sym_0_0_0_i sym_0_0_n t5
 JUMPNIF t5 L4 
-PLUS sym_0_0_0_i ":\t" t6
-PARAM t6  
+PARAM "\t"  
 CALL out 1 
-ASSIGN 1  sym_0_0_0_j
+GREATEQ sym_0_0_0_i 9 t6
+JUMPNIF t6 L5 
+PARAM "--"  
+CALL out 1 
+JUMP L6  
 LABEL L5  
-LESSEQ sym_0_0_0_j sym_0_0_n t7
-JUMPNIF t7 L6 
-MULT sym_0_0_0_i sym_0_0_0_j t8
-ASSIGN t8  sym_0_0_0_1_0_k
-PLUS sym_0_0_0_1_0_k "\t" t9
-PARAM t9  
+PARAM "-"  
 CALL out 1 
-PLUS sym_0_0_0_j 1 t10
-ASSIGN t10  sym_0_0_0_j
-JUMP L5  
 LABEL L6  
-PARAM "\n"  
-CALL out 1 
-PLUS sym_0_0_0_i 1 t11
-ASSIGN t11  sym_0_0_0_i
+PLUS sym_0_0_0_i 1 t7
+ASSIGN t7  sym_0_0_0_i
 JUMP L3  
 LABEL L4  
+PARAM "\n"  
+CALL out 1 
+ASSIGN 1  sym_0_0_0_i
+LABEL L7  
+LESSEQ sym_0_0_0_i sym_0_0_n t8
+JUMPNIF t8 L8 
+PLUS sym_0_0_0_i ":\t" t9
+PARAM t9  
+CALL out 1 
+ASSIGN 1  sym_0_0_0_j
+LABEL L9  
+LESSEQ sym_0_0_0_j sym_0_0_n t10
+JUMPNIF t10 L10 
+MULT sym_0_0_0_i sym_0_0_0_j t11
+ASSIGN t11  sym_0_0_0_2_0_k
+PLUS sym_0_0_0_2_0_k "\t" t12
+PARAM t12  
+CALL out 1 
+PLUS sym_0_0_0_j 1 t13
+ASSIGN t13  sym_0_0_0_j
+JUMP L9  
+LABEL L10  
+PARAM "\n"  
+CALL out 1 
+PLUS sym_0_0_0_i 1 t14
+ASSIGN t14  sym_0_0_0_i
+JUMP L7  
+LABEL L8  
 RETURN null  
 LABEL L0  
 PARAM sym_0_a  

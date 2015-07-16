@@ -17,14 +17,11 @@ std::ifstream inFile;
 bool parser_dbg=false;
 
 void wrong_usage_msg(int arg_num){
-	std::cout<<"[USAGE] vvm <input file>, "<<
-		arg_num<<" args supplied\n";
-	exit(0);
+	fatal("[USAGE] vvm <input file>, "+to_string(arg_num)+" args supplied\n");
 }
 
 void invalid_arg_msg(const char* arg){
-	std::cout<<"[INVALID ARGUMENT] "<<arg<<"\n";
-	exit(0);
+	fatal("[INVALID ARGUMENT] "+std::string(arg)+"\n");
 }
 
 int main(int argc, const char* argv[]){
@@ -46,10 +43,8 @@ int main(int argc, const char* argv[]){
 		}
 	}
 	
-	if(!inFileSupplied){
-		std::cout<<"[ERROR] Input file not defined\n";
-		exit(0);
-	}
+	if(!inFileSupplied)
+		fatal("[ERROR] Input file not defined: "+filename+"\n");
 	
 	inFile.open(filename);
 	

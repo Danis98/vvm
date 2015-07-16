@@ -18,13 +18,17 @@ std::vector<std::string> sys_funcs={
 	"exit"
 };
 
+//Print to console
 void sys_out(){
+	//msg := param_0
 	std::string v=formal_stack.top()[0];
 	tok_type t=get_token_type(v);
+	//Read value
 	if(t==TOK_IDENTIFIER){
 		v=var_map[v].val;
 		t=get_token_type(v);
 	}
+	//Trim the double quotes
 	if(t==TOK_STRING){
 		std::cout<<v.substr(1, v.size()-2);
 	}
@@ -33,6 +37,7 @@ void sys_out(){
 	formal_stack.pop();
 }
 
+//Read line from console
 void sys_in(){
 	std::string s;
 	std::getline(std::cin, s);
@@ -42,6 +47,7 @@ void sys_in(){
 	formal_stack.pop();
 }
 
+//[string / double / bool] -> [int]
 void sys_to_int(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
@@ -62,6 +68,8 @@ void sys_to_int(){
 	formal_stack.pop();
 }
 
+//[string / bool] -> [double]
+//You can assign int values to doubles directly
 void sys_to_double(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
@@ -73,8 +81,6 @@ void sys_to_double(){
 	}
 	if(t==TOK_STRING)
 		val=val.substr(1, val.length()-2);
-	else if(t==TOK_DOUBLE)
-		val=to_string<double>((double)lexical_cast<int>(val));
 	else if(t==TOK_BOOL)
 		val=val=="true"?"1":"0";
 	assign(r, val);
@@ -82,6 +88,7 @@ void sys_to_double(){
 	formal_stack.pop();
 }
 
+//[int / double / bool] -> [string]
 void sys_to_string(){
 	std::string r=ret_stack.top();
 	ret_stack.pop();
@@ -98,8 +105,11 @@ void sys_to_string(){
 	formal_stack.pop();
 }
 
+//a^b
 void sys_pow(){
+	//a := param_0
 	std::string a=formal_stack.top()[0];
+	//b := param_1
 	std::string b=formal_stack.top()[1];
 	tok_type s_a=get_token_type(a), s_b=get_token_type(b);
 	double val_a, val_b;
@@ -112,7 +122,9 @@ void sys_pow(){
 	formal_stack.pop();
 }
 
+//Square root
 void sys_sqrt(){
+	//a := param_0
 	std::string a=formal_stack.top()[0];
 	tok_type s_a=get_token_type(a);
 	double val_a;
@@ -124,6 +136,7 @@ void sys_sqrt(){
 	formal_stack.pop();
 }
 
+//Exit from the program
 void sys_exit(){
 	exit(0);
 }

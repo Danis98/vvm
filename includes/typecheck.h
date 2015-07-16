@@ -2,6 +2,8 @@
 #define _TYPECHECK_H
 
 #include <variable_map.h>
+#include <fatal_error.h>
+
 #include <cstdlib>
 #include <iostream>
 

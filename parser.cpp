@@ -106,8 +106,7 @@ int required_operands(std::string cmd){
 	for(int i=0;i<cmd_num;i++)
 		if(cmd_str[i]==cmd)
 			return req_ops[i];
-	std::cout<<"[ERROR] Unknown command "<<cmd<<"\n";
-	exit(0);
+	fatal("[ERROR] Unknown command "+cmd+"\n");
 }
 
 //Get the command from the string
@@ -150,10 +149,8 @@ cmd_type get_cmd(std::string cmd){
 		return CGE;
 	if(cmd=="RETURN")
 		return RET;
-	else{
-		std::cout<<"[ERROR] Unknown command "<<cmd<<"\n";
-		exit(0);
-	}
+	else
+		fatal("[ERROR] Unknown command "+cmd+"\n");
 }
 
 //Parse the input file line by line
@@ -224,11 +221,8 @@ void parse_line(std::string line){
 		}
 		else{
 			//Escape sequences cannot be outside strings
-			if(ch=='\\'){
-				std::cout<<"[ERROR] Misplaced escape sequence at line "
-					<<line_num<<"\n";
-				exit(0);
-			}
+			if(ch=='\\')
+				fatal("[ERROR] Misplaced escape sequence at line "+to_string(line_num)+"\n");
 			//Entering a string
 			if(ch=='"'){
 				accum+=ch;
@@ -263,9 +257,7 @@ void parse_line(std::string line){
 			else if(ch==' ' && begin){}
 			//Uhhh... what?
 			else{
-				std::cout<<"[ERROR] Invalid character "
-					<<ch<<" at line "<<line_num<<"\n";
-				exit(0);
+				fatal("[ERROR] Invalid character "+to_string(ch)+" at line "+to_string(line_num)+"\n");
 			}
 		}
 	}

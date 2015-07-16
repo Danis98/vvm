@@ -1,5 +1,6 @@
 #include <executer.h>
 
+//Determines the data type from the token type
 #define TOK_TYPE_TO_VAR_TYPE(tok, var, var_name)				\
 (tok==TOK_PARAM? var=var_map[formal_stack.top()[get_par_num(var_name)]].type:	\
 	(tok==TOK_IDENTIFIER? var=var_map[var_name].type:			\
@@ -15,9 +16,12 @@
 	)									\
 )
 
+//Instruction currently being executed
 int instr_ptr=0;
+//Show the values of the variables at the end of the program?
 bool final_dbg=false;
 
+//Execute the program
 void execute(){
 	while(instr_ptr<instr_num){
 		exec_instr(instr_ptr);
@@ -30,6 +34,7 @@ void execute(){
 	}
 }
 
+//Execute one instruction
 void exec_instr(int index){
 	cmd_t cmd=cmds[index];
 	
@@ -46,18 +51,25 @@ void exec_instr(int index){
 	else if(cmd.type==ASSIGN)
 		assign(cmd.r, cmd.a1);
 	//Function calling and returning
+	//Push a param to the stack
 	else if(cmd.type==PARAM)
 		par_stack.push_back(cmd.a1);
+	//Call a func
 	else if(cmd.type==CALL){
+		//Save the name of the result variable so it can be seen by the return instruction
 		if(cmd.r!="") ret_stack.push(cmd.r);
+		//Pop N params from the stack and set the resulting vector as the current formal parameters
 		formal_params formal;
 		for(int i=0;i<lexical_cast<int>(cmd.a2);i++){
 			formal.push_back(par_stack[par_stack.size()-1]);
 			par_stack.pop_back();
 		}
 		formal_stack.push(formal);
+		//If user defined func
 		if(std::find(sys_funcs.begin(), sys_funcs.end(), cmd.a1)==sys_funcs.end()){
+			//Save the current instruction pointer
 			call_stack.push(instr_ptr);
+			//Jump to func body
 			instr_ptr=labels[cmd.a1];
 		}
 		else{
@@ -103,21 +115,22 @@ void exec_instr(int index){
 		if(!var_map[cmd.a1].checkTrue())
 			instr_ptr=labels[cmd.a2];
 	}
+	//Pass to the next instr
 	instr_ptr++;
 }
 
 //a := b
 void assign(std::string a, std::string b){
-	if(get_token_type(a)!=TOK_IDENTIFIER){
-		std::cout<<a<<" is read-only!\n";
-		exit(0);
-	}
+	//Cannot put values in objects other than vars
+	if(get_token_type(a)!=TOK_IDENTIFIER)
+		fatal(a+" is read-only!\n");
 	tok_type expr_type=get_token_type(b);
-	//Interpret an eventual param_n and recalculate
+	//Interpret an eventual param_# and recalculate
 	if(expr_type==TOK_PARAM){
 		b=formal_stack.top()[get_par_num(b)];
 		expr_type=get_token_type(b);
 	}
+	//If the variable hasn't been set before set its data type
 	if(var_map[a].type==UNINITIALIZED){
 		var_type res_type;
 		TOK_TYPE_TO_VAR_TYPE(expr_type, res_type, b);
@@ -126,19 +139,14 @@ void assign(std::string a, std::string b){
 		else
 			var_map[a]={res_type, b};
 	}
+	//If the variable has already been set, execute a typecheck before setting
 	else{
 		var_type t;
 		TOK_TYPE_TO_VAR_TYPE(expr_type, t, b);
-		if(var_map[a].type!=(expr_type==TOK_IDENTIFIER?var_map[b].type:t)){
-			if(var_map[a].type==DOUBLE && var_map[b].type==INT
-				|| var_map[a].type==INT && var_map[b].type==DOUBLE)
-				var_map[a].type==DOUBLE;
-			else{
-				std::cout<<"Incompatible assignment: "<<a<<" := "<<b<<" ("<<var_types_str[var_map[a].type]
-					<<" := "<<var_types_str[var_map[b].type]<<"["<<expr_type<<"]) at line "<<instr_ptr+1<<"\n";
-				exit(0);
-			}
-		}
+		if(var_map[a].type!=(expr_type==TOK_IDENTIFIER?var_map[b].type:t))
+			if(var_map[a].type!=DOUBLE || var_map[b].type!=INT)
+				fatal("Incompatible assignment: "+a+" := "+b+" ("+var_types_str[var_map[a].type]
+					+" := "+var_types_str[var_map[b].type]+"["+to_string(expr_type)+"]) at line "+to_string(instr_ptr+1)+"\n");
 		if(expr_type==TOK_IDENTIFIER)
 			var_map[a].val=var_map[b].val;
 		else
@@ -150,25 +158,29 @@ void assign(std::string a, std::string b){
 void execute_math_op(cmd_t cmd){
 	var_type a_type, b_type, r_type;
 	std::string a_val, b_val, r_val;
+	//Get data types
 	tok_type tok_a=get_token_type(cmd.a1);
 	TOK_TYPE_TO_VAR_TYPE(tok_a, a_type, cmd.a1);
 	tok_type tok_b=get_token_type(cmd.a2);
 	TOK_TYPE_TO_VAR_TYPE(tok_b, b_type, cmd.a2);
 	r_type=determine_res_type(a_type, b_type);
-	
+	//Get values
 	a_val=tok_a==TOK_IDENTIFIER?var_map[cmd.a1].val:cmd.a1;
 	b_val=tok_b==TOK_IDENTIFIER?var_map[cmd.a2].val:cmd.a2;
 	
 	//Handle logical operators
 	switch(cmd.type){
+		//==
 		case CEQ:
 			r_val=a_val==b_val?"true":"false";
 			var_map[cmd.r]={BOOL, r_val};
 			return;
+		//!=
 		case CNE:
 			r_val=a_val!=b_val?"true":"false";
 			var_map[cmd.r]={BOOL, r_val};
 			return;
+		//<
 		case CLT:
 			if(a_type!=INT && a_type!=DOUBLE
 				|| b_type!=INT && b_type!=DOUBLE)
@@ -177,6 +189,7 @@ void execute_math_op(cmd_t cmd){
 			r_val=lexical_cast<double>(a_val) < lexical_cast<double>(b_val)?"true":"false";
 			var_map[cmd.r]={BOOL, r_val};
 			return;
+		//<=
 		case CLE:
 			if(a_type!=INT && a_type!=DOUBLE
 				|| b_type!=INT && b_type!=DOUBLE)
@@ -185,6 +198,7 @@ void execute_math_op(cmd_t cmd){
 			r_val=lexical_cast<double>(a_val) <= lexical_cast<double>(b_val)?"true":"false";
 			var_map[cmd.r]={BOOL, r_val};
 			return;
+		//>
 		case CGT:
 			if(a_type!=INT && a_type!=DOUBLE
 				|| b_type!=INT && b_type!=DOUBLE)
@@ -193,6 +207,7 @@ void execute_math_op(cmd_t cmd){
 			r_val=lexical_cast<double>(a_val) > lexical_cast<double>(b_val)?"true":"false";
 			var_map[cmd.r]={BOOL, r_val};
 			return;
+		//>=
 		case CGE:
 			if(a_type!=INT && a_type!=DOUBLE
 				|| b_type!=INT && b_type!=DOUBLE)
@@ -211,7 +226,7 @@ void execute_math_op(cmd_t cmd){
 	else if(r_type==STRING)
 		fatal("Unsupported string operation: "+cmd_str[(int)cmd.type]+"\n");
 	//Numerical
-	//Bools don't have other compatible operands yet
+	//Bools don't have operands yet
 	if(a_type==BOOL || b_type==BOOL)
 		fatal("Mathematical operator "+cmd_str[(int)cmd.type]+" on bool values\n");
 	
@@ -253,6 +268,7 @@ void execute_math_op(cmd_t cmd){
 	}
 }
 
+//param_# -> #
 int get_par_num(std::string id){
 	return lexical_cast<int>(id.substr(6));
 }
@@ -272,10 +288,8 @@ tok_type get_token_type(std::string tok){
 		t=TOK_IDENTIFIER;
 	else if(strncmp(tok.c_str(), "param_", 6)==0)
 		t=TOK_PARAM;
-	else{
-		std::cout<<"Invalid token "<<tok<<"\n";
-		exit(0);
-	}
+	else
+		fatal("Invalid token "+tok+"\n");
 	return t;
 }
 
